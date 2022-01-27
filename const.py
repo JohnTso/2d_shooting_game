@@ -6,4 +6,8 @@ red = (255, 0, 0)
 gray = (169, 169, 169)
 green = (0, 255, 0)
 yellow = (255, 255, 0)
-
+key_a = 12551
+key_s = 12555
+key_d = 12558
+key_w = 12554
+key_space = 32

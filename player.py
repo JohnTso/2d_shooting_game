@@ -20,6 +20,7 @@ class Player(pg.sprite.Sprite):
         pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-15, 103, 10), 2)
         pg.draw.rect(self.game.screen, const.green, pg.Rect(self.x, self.y-13, self.hp, 6))
         self.game.screen.blit(self.game.hp_heart, (self.x-15, self.y-27))
+        self.hits = 1
 
     def draw_player(self, x, y, frame):
         if self.hp <= 0:
@@ -28,6 +29,8 @@ class Player(pg.sprite.Sprite):
         self.x = x+500
         self.y = y+500
         self.image = self.game.ani_l[frame-1]
+        if self.game.face_r:
+            self.image = pg.transform.flip(self.image, True, False)
         self.rect = pg.Surface.get_rect(self.image, topleft=(self.x+5, self.y))
         self.rect = self.rect.inflate(-40, -30)
         pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-16, 102, 10), 2)
@@ -46,6 +49,7 @@ class Player(pg.sprite.Sprite):
         self.game.screen.blit(rotated_gun,(self.gun_x, self.gun_y))
 
     def update_bullets(self):
+        text = pg.font.SysFont("roman", 30)
         if self.bullets:
 
             for bullet in self.bullets:
@@ -53,6 +57,9 @@ class Player(pg.sprite.Sprite):
                 if hits:
                     self.bullets.remove(bullet)
                     for hit in hits:
+                    
+                        self.game.acc_text_sur = text.render(f'Accuracy: {int(self.hits * (100 / self.game.shots))}%', False, const.red)
+                        self.hits += 1
                         self.game.screen.blit(self.game.explo, (bullet.x, bullet.y))
                         hit.hp -= bullet.damage
                         bullet.kill()
