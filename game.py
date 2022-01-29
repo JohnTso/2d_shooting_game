@@ -23,6 +23,7 @@ class Game():
         self.face_r = False
         self.key_list = []
         self.shots = 0
+        self.hits = 0
 
     def load_images(self):
         self.gun = pg.image.load("images/gun.png")
@@ -64,7 +65,7 @@ class Game():
 
         while self.running:
 
-            if time.time() - self.spawn_time > 5:
+            if time.time() - self.spawn_time >= 5.5:
                 self.spawn_time = time.time()
                 self.player.generate_zombies()
 
@@ -77,7 +78,6 @@ class Game():
             self.clock.tick(60)
             pos = pg.mouse.get_pos()
             self.update(self.frame)
-            # print(frame)
             pg.display.flip()
             keys = pg.key.get_pressed()
             for ev in pg.event.get():
@@ -91,7 +91,7 @@ class Game():
                     if ev.key == const.key_a:
                         self.face_r = True
                         self.x -= self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.15:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -101,7 +101,7 @@ class Game():
 
                     elif ev.key == const.key_s: 
                         self.y += self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.15:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -111,7 +111,7 @@ class Game():
                     elif ev.key == const.key_d:
                         self.face_r = False
                         self.x += self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.15:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -120,7 +120,7 @@ class Game():
 
                     elif ev.key == const.key_w:
                         self.y -= self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.15:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:

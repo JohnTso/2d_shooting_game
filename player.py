@@ -29,6 +29,7 @@ class Player(pg.sprite.Sprite):
         self.x = x+500
         self.y = y+500
         self.image = self.game.ani_l[frame-1]
+
         if self.game.face_r:
             self.image = pg.transform.flip(self.image, True, False)
         self.rect = pg.Surface.get_rect(self.image, topleft=(self.x+5, self.y))
@@ -57,7 +58,7 @@ class Player(pg.sprite.Sprite):
                 if hits:
                     self.bullets.remove(bullet)
                     for hit in hits:
-                    
+                        self.game.hits = self.hits
                         self.game.acc_text_sur = text.render(f'Accuracy: {int(self.hits * (100 / self.game.shots))}%', False, const.red)
                         self.hits += 1
                         self.game.screen.blit(self.game.explo, (bullet.x, bullet.y))

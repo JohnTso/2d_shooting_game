@@ -18,6 +18,7 @@ class Bullet(pg.sprite.Sprite):
         self.rect = self.rotated_b.get_rect(center=(pos))
         self.speed = 20
         self.damage = 5
+        self.text = pg.font.SysFont("roman", 30)
 
     def draw(self, x, y):
         self.bx = x
@@ -29,5 +30,6 @@ class Bullet(pg.sprite.Sprite):
         # pg.draw.rect(screen, YELLOW, self.rect)
         self.game.screen.blit(self.rotated_b, (self.bx, self.by))
         if 0 > self.bx or self.bx > const.width or 0 > self.by or self.by > const.height:
+            self.game.acc_text_sur = self.text.render(f'Accuracy: {int(self.game.hits * (100 / self.game.shots))}%', False, const.red)
             self.game.player.bullets.remove(self)
             self.kill()
