@@ -29,7 +29,7 @@ class Player(pg.sprite.Sprite):
         self.x = x+500
         self.y = y+500
         self.image = self.game.ani_l[frame-1]
-
+        
         if self.game.face_r:
             self.image = pg.transform.flip(self.image, True, False)
         self.rect = pg.Surface.get_rect(self.image, topleft=(self.x+5, self.y))
