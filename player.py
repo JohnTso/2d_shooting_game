@@ -59,7 +59,10 @@ class Player(pg.sprite.Sprite):
                     self.bullets.remove(bullet)
                     for hit in hits:
                         self.game.hits = self.hits
-                        self.game.acc_text_sur = text.render(f'Accuracy: {int(self.hits * (100 / self.game.shots))}%', False, const.red)
+                        self.acc = int(self.hits * (100 / self.game.shots))
+                        if self.acc > 100:
+                            self.acc = 100
+                        self.game.acc_text_sur = text.render(f'Accuracy: {self.acc}%', False, const.red)
                         self.hits += 1
                         self.game.screen.blit(self.game.explo, (bullet.x, bullet.y))
                         hit.hp -= bullet.damage
