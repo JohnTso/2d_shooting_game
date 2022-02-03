@@ -1,9 +1,10 @@
 import pygame as pg
-import time, os
+import time, os, random
 import const
 
 from zombie import Zombie
 from player import Player
+from map import Grass
 
 
 class Game():
@@ -27,6 +28,11 @@ class Game():
         self.fps_time = 0
         self.fps = 0
         self.fps_count = 0
+        self.grass_list = []
+        for _ in range(random.randint(15, 20)):
+            g = Grass(self)
+            self.grass_list.append(g)
+
 
     def load_images(self):
         self.gun = pg.image.load("images/gun.png")
@@ -48,10 +54,12 @@ class Game():
     def update(self, f):
         screen.fill(const.gray)
         self.pos = pg.mouse.get_pos()
-        pg.draw.rect(screen, const.yellow, pg.Rect(50, 50, 900, 900), 7)
+        for grass in self.grass_list:
+            grass.draw()
+        # pg.draw.rect(screen, const.yellow, pg.Rect(50, 50, 900, 900), 7)
         text = pg.font.SysFont('Roman', 30)
         self.fps_text = text.render(f"FPS: {self.fps}", False, const.black)
-        screen.blit(self.fps_text, (500, 10))
+        screen.blit(self.fps_text, (400, 10))
         if not self.shots:
             self.acc_text_sur = text.render('Accuracy: n/a', False, const.red)
             screen.blit(self.acc_text_sur, (10,10))
@@ -64,7 +72,7 @@ class Game():
         self.player.draw_gun(self.pos[0], self.pos[1])
         pg.display.flip()
         self.fps_count += 1
-
+        
 
     def run(self):
 
@@ -98,52 +106,59 @@ class Game():
                 pg.key.set_repeat(25, 25)
                 if ev.type == pg.KEYDOWN:
                     
-                    if ev.key == const.key_a:
+                    if ev.key == pg.K_a:
                         self.face_r = True
                         self.x -= self.player.speed
-                        if time.time() - self.frame_update > 0.13:
+                        if time.time() - self.frame_update > 0.1:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
-
+                        for grass in self.grass_list:
+                            grass.x += 1.75
     
 
-                    elif ev.key == const.key_s: 
+                    elif ev.key == pg.K_s: 
                         self.y += self.player.speed
-                        if time.time() - self.frame_update > 0.13:
+                        if time.time() - self.frame_update > 0.1:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+                        for grass in self.grass_list:
+                            grass.y -= 1.75
 
 
-                    elif ev.key == const.key_d:
+                    elif ev.key == pg.K_d:
                         self.face_r = False
                         self.x += self.player.speed
-                        if time.time() - self.frame_update > 0.13:
+                        if time.time() - self.frame_update > 0.1:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+                        for grass in self.grass_list:
+                            grass.x -= 1.75
 
 
-                    elif ev.key == const.key_w:
+                    elif ev.key == pg.K_w:
                         self.y -= self.player.speed
-                        if time.time() - self.frame_update > 0.13:
+                        if time.time() - self.frame_update > 0.1:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+                        for grass in self.grass_list:
+                            grass.y += 1.75
 
-                    if ev.key == const.key_space:
+                    if ev.key == pg.K_SPACE:
                         if time.time() - self.t1 >= 0.3:
                             self.shots += 1
                             self.t1 = time.time()
                             screen.blit(self.explo, (self.player.gun_x, self.player.gun_y))
                             self.player.generate_bullet(pos[0]-25, pos[1]-25)
                     
-                    elif (keys[const.key_a] or keys[const.key_s] or keys[const.key_d] or keys[const.key_w]) and keys[const.key_space]:
+                    elif (keys[pg.K_a] or keys[pg.K_s] or keys[pg.K_d] or keys[pg.K_w]) and keys[pg.K_SPACE]:
                         
                         if time.time() - self.t1 >= 0.5:
                             self.shots += 1
