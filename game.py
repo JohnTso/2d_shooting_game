@@ -4,7 +4,7 @@ import const
 
 from zombie import Zombie
 from player import Player
-from map import Grass
+from detail import Grass
 
 
 class Game():
@@ -109,7 +109,7 @@ class Game():
                     if ev.key == pg.K_a:
                         self.face_r = True
                         self.x -= self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -120,7 +120,7 @@ class Game():
 
                     elif ev.key == pg.K_s: 
                         self.y += self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -132,7 +132,7 @@ class Game():
                     elif ev.key == pg.K_d:
                         self.face_r = False
                         self.x += self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -143,7 +143,7 @@ class Game():
 
                     elif ev.key == pg.K_w:
                         self.y -= self.player.speed
-                        if time.time() - self.frame_update > 0.1:
+                        if time.time() - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:

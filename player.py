@@ -17,9 +17,9 @@ class Player(pg.sprite.Sprite):
         self.image = game.ani_l[0]
         self.rect = pg.Surface.get_rect(self.image, topleft=(self.x, self.y))
         self.rect = self.rect.inflate(-40, -30)
-        pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-15, 103, 10), 2)
-        pg.draw.rect(self.game.screen, const.green, pg.Rect(self.x, self.y-13, self.hp, 6))
-        self.game.screen.blit(self.game.hp_heart, (self.x-15, self.y-27))
+        pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-20, self.y-18, 103, 10), 2)
+        pg.draw.rect(self.game.screen, const.green, pg.Rect(self.x-18, self.y-13, self.hp, 6))
+        self.game.screen.blit(self.game.hp_heart, (self.x-30, self.y-30))
         self.hits = 1
 
     def draw_player(self, x, y, frame):

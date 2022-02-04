@@ -21,6 +21,7 @@ class Zombie(pg.sprite.Sprite):
         self.dmg_cooldown = 0
         self.image = self.game.zom_enemy
         self.aid = False
+        self.level = self.damage*self.speed*self.hp // 100
 
 
     def draw(self, x, y, px, py):
@@ -53,4 +54,7 @@ class Zombie(pg.sprite.Sprite):
         else:
             pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x - 2 + self.hp_copy//3, self.y-16, self.hp_copy+3, 10), 2)
             pg.draw.rect(self.game.screen, const.green, pg.Rect(self.x + self.hp_copy//3, self.y-13, self.hp, 6))
+        text = pg.font.SysFont('SysFont', 30)
+        self.lvl_text = text.render(f"Lvl. {self.level}", False, const.red)
+        self.game.screen.blit(self.lvl_text, (self.x+10, self.y-35))
         # pg.draw.rect(screen, YELLOW, self.rect)
