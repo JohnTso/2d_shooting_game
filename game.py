@@ -29,7 +29,7 @@ class Game():
         self.fps = 0
         self.fps_count = 0
         self.grass_list = []
-        for _ in range(random.randint(15, 20)):
+        for _ in range(random.randint(30, 60)):
             g = Grass(self)
             self.grass_list.append(g)
 
@@ -56,7 +56,7 @@ class Game():
         self.pos = pg.mouse.get_pos()
         for grass in self.grass_list:
             grass.draw()
-        # pg.draw.rect(screen, const.yellow, pg.Rect(50, 50, 900, 900), 7)
+        # pg.draw.rect(screen, const.yellow, pg.Rect(-self.player.x+400, -self.player.y+400, 1500, 1500), 7)
         text = pg.font.SysFont('Roman', 30)
         self.fps_text = text.render(f"FPS: {self.fps}", False, const.black)
         screen.blit(self.fps_text, (400, 10))
@@ -115,7 +115,7 @@ class Game():
                             if self.frame > 12:
                                 self.frame = 1
                         for grass in self.grass_list:
-                            grass.x += 1.75
+                            grass.x += 7
     
 
                     elif ev.key == pg.K_s: 
@@ -126,7 +126,7 @@ class Game():
                             if self.frame > 12:
                                 self.frame = 1
                         for grass in self.grass_list:
-                            grass.y -= 1.75
+                            grass.y -= 7
 
 
                     elif ev.key == pg.K_d:
@@ -138,8 +138,7 @@ class Game():
                             if self.frame > 12:
                                 self.frame = 1
                         for grass in self.grass_list:
-                            grass.x -= 1.75
-
+                            grass.x -= 7
 
                     elif ev.key == pg.K_w:
                         self.y -= self.player.speed
@@ -149,7 +148,7 @@ class Game():
                             if self.frame > 12:
                                 self.frame = 1
                         for grass in self.grass_list:
-                            grass.y += 1.75
+                            grass.y += 7
 
                     if ev.key == pg.K_SPACE:
                         if time.time() - self.t1 >= 0.3:
