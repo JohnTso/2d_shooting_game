@@ -4,7 +4,7 @@ import const
 
 from zombie import Zombie
 from player import Player
-from detail import Grass
+from grass import Grass
 
 
 class Game():

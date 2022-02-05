@@ -14,10 +14,3 @@ class Grass:
         self.game.screen.blit(self.image, (self.x, self.y))
 
 
-
-
-# class Block:
-
-#     def __init__(self, game):
-#         self.game = game
-
