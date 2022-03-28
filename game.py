@@ -5,6 +5,7 @@ import const
 from zombie import Zombie
 from player import Player
 from grass import Grass
+from menu import Menu
 
 
 class Game():
@@ -29,6 +30,7 @@ class Game():
         self.fps = 0
         self.fps_count = 0
         self.grass_list = []
+        self.volume = 50
         for _ in range(random.randint(30, 60)):
             g = Grass(self)
             self.grass_list.append(g)
@@ -76,13 +78,17 @@ class Game():
 
     def run(self):
 
+        if self.running:
+            pg.mixer.music.set_volume(0.01*self.volume)
+            pg.mixer.music.unpause()
+            
         while self.running:
 
             if time.time() - self.spawn_time >= 5.5:
                 self.spawn_time = time.time()
                 self.player.generate_zombies()
             
-            if time.time() - self.fps_time >= 1:
+            if time.time() - self.fps_time > 1:
                 self.fps_time = time.time()
                 self.fps = self.fps_count
                 self.fps_count = 0
@@ -100,7 +106,6 @@ class Game():
             keys = pg.key.get_pressed()
             for ev in pg.event.get():
                 if ev.type == pg.QUIT:
-                    self.running = False
                     quit()
 
                 pg.key.set_repeat(25, 25)
@@ -164,20 +169,40 @@ class Game():
                             self.t1 = time.time()
                             screen.blit(self.explo, (self.player.gun_x, self.player.gun_y))
                             self.player.generate_bullet(pos[0]-25, pos[1]-25)
-                    
-                    
+    
+                    if keys[pg.K_p]:
+                        self.running = False
 
+        if not self.running:
+            pg.mouse.set_visible(True)
+            pg.mixer.music.pause()
+            self.menu = Menu()
+            self.fade = pg.Surface((1000, 1000))
+            self.fade.fill((0,0,0))
+            self.fade.set_alpha(150)
+            self.screen.blit(self.fade, (0,0))
 
-
+            while not self.running:
+                pos = pg.mouse.get_pos()
+                for ev in pg.event.get():
+                    self.menu.update(pos[0], pos[1], self,  pg.mouse.get_pressed(num_buttons=3)[0])
+                    if ev.type == pg.QUIT:
+                        quit()
+                    elif ev.type == pg.KEYDOWN:
+                        if ev.key == pg.K_o:
+                            self.running = True
+                            self.run()
+                pg.display.flip()
 
 if __name__ == "__main__":
     pg.init()
     screen = pg.display.set_mode((const.width, const.height))
     pg.display.set_caption("2D shooting game")
     pg.font.init()
+    game = Game()
     pg.draw.rect(screen, const.black, pg.Rect(500,500,50,50))
     pg.mixer.music.load("straightfuse.mp3")
     pg.mixer.music.play(-1)
-    pg.mixer.music.set_volume(0.1)
-    game = Game()
+    pg.mixer.music.set_volume(0.2*game.volume)
+    pg.mouse.set_visible(False)
     game.run()
