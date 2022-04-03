@@ -31,6 +31,8 @@ class Game():
         self.fps_count = 0
         self.grass_list = []
         self.volume = 50
+        self.treasures = pg.sprite.Group()
+        self.coins = 0
         for _ in range(random.randint(30, 60)):
             g = Grass(self)
             self.grass_list.append(g)
@@ -54,19 +56,35 @@ class Game():
             self.ani_l.append(i)
 
     def update(self, f):
+
         screen.fill(const.gray)
         self.pos = pg.mouse.get_pos()
         for grass in self.grass_list:
             grass.draw()
-        # pg.draw.rect(screen, const.yellow, pg.Rect(-self.player.x+400, -self.player.y+400, 1500, 1500), 7)
+
+        if self.treasures:
+            for treasure in self.treasures:
+                treasure.draw(self)
+
+
         text = pg.font.SysFont('Roman', 30)
+
         self.fps_text = text.render(f"FPS: {self.fps}", False, const.black)
         screen.blit(self.fps_text, (400, 10))
+
+        self.coin_text = text.render(f"Coins: {self.coins}", False, const.yellow)
+        screen.blit(self.coin_text, (850, 20))
+
+        self.hp_text = text.render(f"HP: {self.player.hp}", False, (2.55*(100-self.player.hp), 2.55*self.player.hp, 0))
+        screen.blit(self.hp_text, (850, 70))
+
         if not self.shots:
             self.acc_text_sur = text.render('Accuracy: n/a', False, const.red)
             screen.blit(self.acc_text_sur, (10,10))
         else:
             screen.blit(self.acc_text_sur, (10,10))
+        
+
         screen.blit(self.aim_b, (self.pos[0]-25, self.pos[1]-25))
         self.player.update_bullets()
         self.player.update_zombies()
@@ -98,6 +116,18 @@ class Game():
                 if time.time() - d.dmg_cooldown >= 0.7:
                     d.dmg_cooldown = time.time()
                     self.player.hp -= d.damage
+            
+            t_claimed = pg.sprite.spritecollide(self.player, self.treasures, True)
+            for t in t_claimed:
+                if t.type == 'coin':
+                    print("coin + 1!")
+                    self.coins += 1
+                elif t.type == 'hp' and self.player.hp < 100:
+                    print("hp + 10!")
+                    self.player.hp += 10
+                    if self.player.hp > 100:
+                        self.player.hp = 100
+
 
             self.clock.tick(60)
             pos = pg.mouse.get_pos()
@@ -119,8 +149,12 @@ class Game():
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+                                
                         for grass in self.grass_list:
                             grass.x += 7
+
+                        for treasure in self.treasures:
+                            treasure.x += 7
     
 
                     elif ev.key == pg.K_s: 
@@ -130,8 +164,12 @@ class Game():
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+
                         for grass in self.grass_list:
                             grass.y -= 7
+
+                        for treasure in self.treasures:
+                            treasure.y -= 7
 
 
                     elif ev.key == pg.K_d:
@@ -142,8 +180,13 @@ class Game():
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+
                         for grass in self.grass_list:
                             grass.x -= 7
+
+                        for treasure in self.treasures:
+                            treasure.x -= 7
+                        
 
                     elif ev.key == pg.K_w:
                         self.y -= self.player.speed
@@ -152,8 +195,12 @@ class Game():
                             self.frame += 1
                             if self.frame > 12:
                                 self.frame = 1
+
                         for grass in self.grass_list:
                             grass.y += 7
+
+                        for treasure in self.treasures:
+                            treasure.y += 7
 
                     if ev.key == pg.K_SPACE:
                         if time.time() - self.t1 >= 0.3:

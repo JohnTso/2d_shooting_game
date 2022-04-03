@@ -34,8 +34,8 @@ class Player(pg.sprite.Sprite):
             self.image = pg.transform.flip(self.image, True, False)
         self.rect = pg.Surface.get_rect(self.image, topleft=(self.x+5, self.y))
         self.rect = self.rect.inflate(-40, -30)
-        pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-16, 102, 10), 2)
-        pg.draw.rect(self.game.screen, (2.55*(100-self.hp), 2.55*self.hp, 0), pg.Rect(self.x, self.y-13, self.hp, 6))
+        pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-16, 106, 10), 2)
+        pg.draw.rect(self.game.screen, (2.55*(100-self.hp), 2.55*self.hp, 0), pg.Rect(self.x+5, self.y-14, self.hp, 6))
         self.game.screen.blit(self.game.hp_heart, (self.x-15, self.y-27))
         self.game.screen.blit(self.image, (self.x, self.y))
 
@@ -71,6 +71,7 @@ class Player(pg.sprite.Sprite):
                 bullet.x += math.cos(bullet.angle) * bullet.speed
                 bullet.y += math.sin(bullet.angle) * bullet.speed
                 bullet.draw(bullet.x, bullet.y)
+    
 
     def update_zombies(self):
         if self.zombies:
@@ -79,7 +80,10 @@ class Player(pg.sprite.Sprite):
 
                 zombie.x += math.cos(zombie.angle) * zombie.speed
                 zombie.y += math.sin(zombie.angle) * zombie.speed
-                zombie.draw(zombie.x, zombie.y, self.x+10, self.y)
+                zombie.draw(self.x+10, self.y)
+    
+    # def update_treasures(self):
+    #     if self.
 
 
     def generate_bullet(self, mx, my):

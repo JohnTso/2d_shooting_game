@@ -12,5 +12,3 @@ class Grass:
     
     def draw(self):
         self.game.screen.blit(self.image, (self.x, self.y))
-
-

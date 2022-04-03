@@ -31,16 +31,17 @@ class Menu:
                     game.run()
             else:
                 self.btg_text = self.text.render("Back to Game", False, const.white)
-        elif 350 < my < 400:
+        else:
+                self.btg_text = self.text.render("Back to Game", False, const.white)
+
+        if 350 < my < 400:
             if 300 < mx < 350:
-                self.volume_text = self.vol_text.render(f"Volume: {game.volume}%", False, const.blue)
                 pg.draw.rect(game.screen, const.blue, self.volume_d_button)
                 if click:
                     pg.draw.rect(game.screen, const.red, self.volume_d_button)
                     if game.volume:
                         game.volume -= 1
             elif 550 < mx < 600:
-                self.volume_text = self.vol_text.render(f"Volume: {game.volume}%", False, const.blue)
                 pg.draw.rect(game.screen, const.blue, self.volume_u_button)
                 if click:
                     pg.draw.rect(game.screen, const.red, self.volume_u_button)
