@@ -15,6 +15,6 @@ class Particle(pg.sprite.Sprite):
         if self.change_in_y < -15:
             self.kill()
         self.image.set_alpha(self.alpha)
-        self.alpha -= 5
+        self.alpha -= 3
         self.change_in_y -= 1
-        screen.blit(self.image, (px+5, py+self.change_in_y))
+        screen.blit(self.image, (px, py+self.change_in_y))

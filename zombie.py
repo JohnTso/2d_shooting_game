@@ -24,7 +24,7 @@ class Zombie(pg.sprite.Sprite):
         self.aid = False
         self.level = self.damage*self.speed*self.hp // 100
         self.drop_treasure = random.randint(0,1)
-
+        print(self.drop_treasure)
 
     def draw(self, px, py):
 
@@ -45,7 +45,7 @@ class Zombie(pg.sprite.Sprite):
         if self.rot_ang > 270 or self.rot_ang < 90:
             rotated_knife = pg.transform.flip(self.game.knife, False, True)
         rotated_knife = pg.transform.rotate(rotated_knife, self.rot_ang)
-        
+
         self.rect = pg.Surface.get_rect(self.game.zom_enemy, topleft=(self.x, self.y))
         self.rect = self.rect.inflate(-25, -20)
         self.game.screen.blit(self.image, (self.x, self.y))

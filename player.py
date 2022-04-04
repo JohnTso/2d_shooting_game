@@ -19,7 +19,7 @@ class Player(pg.sprite.Sprite):
         self.rect = self.rect.inflate(-40, -30)
         pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-20, self.y-18, 103, 10), 2)
         pg.draw.rect(self.game.screen, const.green, pg.Rect(self.x-18, self.y-13, self.hp, 6))
-        self.game.screen.blit(self.game.hp_heart, (self.x-30, self.y-30))
+        self.game.screen.blit(self.game.hp_heart, (self.x-25, self.y-27))
         self.hits = 1
 
     def draw_player(self, x, y, frame):
@@ -34,9 +34,9 @@ class Player(pg.sprite.Sprite):
             self.image = pg.transform.flip(self.image, True, False)
         self.rect = pg.Surface.get_rect(self.image, topleft=(self.x+5, self.y))
         self.rect = self.rect.inflate(-40, -30)
-        pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-16, 106, 10), 2)
-        pg.draw.rect(self.game.screen, (2.55*(100-self.hp), 2.55*self.hp, 0), pg.Rect(self.x+5, self.y-14, self.hp, 6))
-        self.game.screen.blit(self.game.hp_heart, (self.x-15, self.y-27))
+        pg.draw.rect(self.game.screen, const.black, pg.Rect(self.x-2, self.y-16, 103, 10), 2)
+        pg.draw.rect(self.game.screen, (2.55*(100-self.hp), 2.55*self.hp, 0), pg.Rect(self.x, self.y-14, self.hp, 6))
+        self.game.screen.blit(self.game.hp_heart, (self.x-25, self.y-27))
         self.game.screen.blit(self.image, (self.x, self.y))
 
 

@@ -37,6 +37,7 @@ class Game():
         self.shooting_cldn = 0.4
         self.zom_spawn_time = 5
         self.spawn_time = time.time()
+        self.next_zom_time = 0
         self.particles = []
         self.p = 0
         self.p_alpha = 0
@@ -113,9 +114,10 @@ class Game():
             pg.mouse.set_visible(False)
             pg.mixer.music.set_volume(0.01*self.volume)
             pg.mixer.music.unpause()
+            self.spawn_time = time.time() - self.next_zom_time
             
         while self.running:
-
+            self.current = time.time()
             if time.time() - self.spawn_time >= self.zom_spawn_time:
                 self.spawn_time = time.time()
                 self.player.generate_zombies()
@@ -160,7 +162,7 @@ class Game():
                     if ev.key == pg.K_a:
                         self.face_r = True
                         self.x -= self.player.speed
-                        if time.time() - self.frame_update > 0.12:
+                        if self.current - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -175,7 +177,7 @@ class Game():
 
                     elif ev.key == pg.K_s: 
                         self.y += self.player.speed
-                        if time.time() - self.frame_update > 0.12:
+                        if self.current - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -191,7 +193,7 @@ class Game():
                     elif ev.key == pg.K_d:
                         self.face_r = False
                         self.x += self.player.speed
-                        if time.time() - self.frame_update > 0.12:
+                        if self.current - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -206,7 +208,7 @@ class Game():
 
                     elif ev.key == pg.K_w:
                         self.y -= self.player.speed
-                        if time.time() - self.frame_update > 0.12:
+                        if self.current - self.frame_update > 0.12:
                             self.frame_update = time.time()
                             self.frame += 1
                             if self.frame > 12:
@@ -219,7 +221,7 @@ class Game():
                             treasure.y += 7
 
                     if ev.key == pg.K_SPACE:
-                        if time.time() - self.t1 >= self.shooting_cldn/2:
+                        if self.current - self.t1 >= self.shooting_cldn/2:
                             self.shots += 1
                             self.t1 = time.time()
                             screen.blit(self.explo, (self.player.gun_x, self.player.gun_y))
@@ -227,7 +229,7 @@ class Game():
                     
                     elif (keys[pg.K_a] or keys[pg.K_s] or keys[pg.K_d] or keys[pg.K_w]) and keys[pg.K_SPACE]:
                         
-                        if time.time() - self.t1 >= self.shooting_cldn:
+                        if self.current - self.t1 >= self.shooting_cldn:
                             self.shots += 1
                             self.t1 = time.time()
                             screen.blit(self.explo, (self.player.gun_x, self.player.gun_y))
@@ -237,6 +239,7 @@ class Game():
                         self.running = False
 
         if not self.running:
+            self.next_zom_time = self.zom_spawn_time - (self.current - self.spawn_time)
             pg.mouse.set_visible(True)
             pg.mixer.music.pause()
             self.menu = Menu()
