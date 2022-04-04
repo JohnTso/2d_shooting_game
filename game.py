@@ -6,6 +6,7 @@ from zombie import Zombie
 from player import Player
 from grass import Grass
 from menu import Menu
+from particle import Particle
 
 
 class Game():
@@ -33,6 +34,12 @@ class Game():
         self.volume = 50
         self.treasures = pg.sprite.Group()
         self.coins = 0
+        self.shooting_cldn = 0.4
+        self.zom_spawn_time = 5
+        self.spawn_time = time.time()
+        self.particles = []
+        self.p = 0
+        self.p_alpha = 0
         for _ in range(random.randint(30, 60)):
             g = Grass(self)
             self.grass_list.append(g)
@@ -42,11 +49,14 @@ class Game():
         self.gun = pg.image.load("images/gun.png")
         self.b = pg.image.load("images/bullet.png")
         self.aim_b = pg.image.load("images/aimbutton.png")
-        self.explo = pg.image.load("images/explosion.png")
+        self.explo = pg.image.load("images/details/explosion.png")
         self.zom_enemy = pg.image.load("images/enemy.png")
         self.hp_heart = pg.image.load("images/hp_icon.png")
         self.aid = pg.image.load("images/aid.png")
         self.knife = pg.image.load("images/knife.png")
+        self.knife = pg.transform.flip(self.knife, True, False)
+        self.gold_particle = pg.image.load("images/details/gold_particle.png")
+        self.hp_particle = pg.image.load("images/details/hp_particle.png")
 
         player_images = os.listdir("images/player")
         player_images.sort()
@@ -66,6 +76,9 @@ class Game():
             for treasure in self.treasures:
                 treasure.draw(self)
 
+        if self.particles:
+            for p in self.particles:
+                p.draw(self.player.x, self.player.y, screen)
 
         text = pg.font.SysFont('Roman', 30)
 
@@ -97,12 +110,13 @@ class Game():
     def run(self):
 
         if self.running:
+            pg.mouse.set_visible(False)
             pg.mixer.music.set_volume(0.01*self.volume)
             pg.mixer.music.unpause()
             
         while self.running:
 
-            if time.time() - self.spawn_time >= 5.5:
+            if time.time() - self.spawn_time >= self.zom_spawn_time:
                 self.spawn_time = time.time()
                 self.player.generate_zombies()
             
@@ -119,11 +133,13 @@ class Game():
             
             t_claimed = pg.sprite.spritecollide(self.player, self.treasures, True)
             for t in t_claimed:
+
+                self.p = Particle(t.type, self)
+                self.particles.append(self.p)
+
                 if t.type == 'coin':
-                    print("coin + 1!")
                     self.coins += 1
                 elif t.type == 'hp' and self.player.hp < 100:
-                    print("hp + 10!")
                     self.player.hp += 10
                     if self.player.hp > 100:
                         self.player.hp = 100
@@ -203,7 +219,7 @@ class Game():
                             treasure.y += 7
 
                     if ev.key == pg.K_SPACE:
-                        if time.time() - self.t1 >= 0.3:
+                        if time.time() - self.t1 >= self.shooting_cldn/2:
                             self.shots += 1
                             self.t1 = time.time()
                             screen.blit(self.explo, (self.player.gun_x, self.player.gun_y))
@@ -211,7 +227,7 @@ class Game():
                     
                     elif (keys[pg.K_a] or keys[pg.K_s] or keys[pg.K_d] or keys[pg.K_w]) and keys[pg.K_SPACE]:
                         
-                        if time.time() - self.t1 >= 0.5:
+                        if time.time() - self.t1 >= self.shooting_cldn:
                             self.shots += 1
                             self.t1 = time.time()
                             screen.blit(self.explo, (self.player.gun_x, self.player.gun_y))
@@ -239,6 +255,7 @@ class Game():
                         if ev.key == pg.K_o:
                             self.running = True
                             self.run()
+
                 pg.display.flip()
 
 if __name__ == "__main__":

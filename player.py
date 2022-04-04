@@ -45,9 +45,17 @@ class Player(pg.sprite.Sprite):
         self.my = y
         self.gun_x = self.x + 5
         self.gun_y = self.y + 30
-        self.angle = int(360-math.atan2(self.my-self.y, self.mx-self.x)*180/math.pi)-90
-        rotated_gun = pg.transform.rotate(self.game.gun, self.angle)
-        self.game.screen.blit(rotated_gun,(self.gun_x, self.gun_y))
+        self.angle = int(360-math.atan2(self.my-self.y, self.mx-self.x)*180/math.pi)
+        self.rotated_gun = self.game.gun
+
+        if self.angle < 270 or self.angle > 440:
+            self.gun_x -= 15
+            self.gun_y -= 5
+            self.rotated_gun = pg.transform.flip(self.rotated_gun, False, True)
+
+        self.rotated_gun = pg.transform.rotate(self.rotated_gun, self.angle)
+
+        self.game.screen.blit(self.rotated_gun,(self.gun_x, self.gun_y))
 
     def update_bullets(self):
         text = pg.font.SysFont("roman", 30)
@@ -81,10 +89,6 @@ class Player(pg.sprite.Sprite):
                 zombie.x += math.cos(zombie.angle) * zombie.speed
                 zombie.y += math.sin(zombie.angle) * zombie.speed
                 zombie.draw(self.x+10, self.y)
-    
-    # def update_treasures(self):
-    #     if self.
-
 
     def generate_bullet(self, mx, my):
         b = Bullet((self.gun_x, self.gun_y), self.angle, mx, my, self.game)
